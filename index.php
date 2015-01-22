@@ -1,237 +1,178 @@
 <?php
-
 require_once ("fbCredentials.php");
-//$appId='1560505420851840';
-//$appSecret='bdddcd25a93bb9ce8e5fcb564f9f9280';
-
 
 ?>
 
-
-<!DOCTYPE html>
-<html lang="en">
-
-<head>
-
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="">
-    <meta name="author" content="">
-
+<!doctype html>
+<html class="no-js" lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Facebook Photo Album</title>
+    <link rel="stylesheet" href="assets/css/foundation.css" />
+    <link rel="stylesheet" href="assets/css/fbalbum.css" />
+    <link rel="stylesheet" href="assets/css/foundation-icons.css" />
+    <script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.0/jquery.min.js"></script>
+    <script src="assets/js/vendor/modernizr.js"></script>
+  </head>
+  <body class="page-color" id="main-content">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="asset/css/bootstrap.min.css" rel="stylesheet">
-    <link href="asset/css/fbalbum.css" rel="stylesheet">
-    <script src="http://code.jquery.com/jquery-1.9.0.min.js"></script>
-    <script src="asset/js/fbscript.js"></script>
+  <!-- Navigation -->
+<div id="fb-root"></div>
+  <div class="row">
+    <div class="large-12 columns">
 
+      <nav class="top-bar" data-topbar>
+        <ul class="title-area">
+          <!-- Title Area -->
+          <li class="name">
+            <h1><a href="#"> Facebook Album </a></h1>
+          </li>
+        </ul>
+      </nav>
+      <!-- End Top Bar -->
+    </div>
+  </div>
 
-    <!-- Custom CSS -->
-    <style>
-    body {
+  <!-- End Navigation -->
+  <section id="bef_login">
+                <div class="row">
+                  <div class="medium-7 large-6 columns">
+                    <h1>Facebook Album</h1>
+                    <br>
+                    <h3>Download your Facebook albums
+                      <br class="hide-for-small">
+                      and move it to picasa.</h3>
+                    <br>
+                  </div>
+                </div>
 
-        margin: 0%;
-        /* Required padding for .navbar-fixed-top. Remove if using .navbar-static-top. Change if height of navigation changes. */
-    }
-    </style>
-      <script>
-       
+                <div class="row">
+                  <div class="small-6 columns">
 
-        $(document).ready(function() {
-            $('#aft-login').hide();
+                    <button class="btn_login">Connect with facebook
+                    </button>
+                        </div>
+                </div>
 
-            $('#fbstylelog').hide();
+  </section>
+  <div id="aft_login" class="row margin_top_2 " style="margin-left: auto;margin-right: auto" >
+    <div class="small-12 medium-5 large-4 columns left" id="profile">
 
-            (function(d, s, id) {
-                var js, fjs = d.getElementsByTagName(s)[0];
-                if (d.getElementById(id)) return;
-                js = d.createElement(s); js.id = id;
-                js.src = "//connect.facebook.net/en_US/sdk.js";
-                fjs.parentNode.insertBefore(js, fjs);
-            }(document, 'script', 'facebook-jssdk'));
+      <img src="assets/img/bg.png" id="ProfilePic" style="width: 100%">
 
-var fbAuthResp;
-            window.fbAsyncInit = function() {
-                FB.init({
-                    appId      : '<?php echo $appId ?>',
-                    cookie     : true,  // enable cookies to allow the server to access
-                                        // the session
-                    xfbml      : true,  // parse social plugins on this page
-                    version    : 'v2.1' // use version 2.1
-                });
+      <div id="btn_container" class="text-center">
+        <h3 id="username"></h3>
+        <button class="success button small" style="width: 100%" id="download_all">Download All</button>
 
-                FB.getLoginStatus(function(response) {
+        <button class="button small" style="width: 100%" id="download_selected">Download Selected</button>
 
-                    if (response.status === 'connected')
-                    {
-                        if (response.authResponse) {
-                            fbAuthResp = response;
-                            //Set Accesstoken of user in session
+        <button class="secondary button small" style="width: 100%" id="move_selected">Move Selected</button>
 
-                            $.ajax({
-                                url: 'facebookalbum.php',
-                                type: 'post',
-                                data: {
-                                    'accesstoken': response.authResponse.accessToken
-                                },
-                                success: function (data) {
+        <button class="warning button small" style="width: 100%" id="move_all">Move All</button>
 
-                                }
-                            });
+        <button class="alert button small" style="width: 100%" id="signout"> Signout</button>
 
-                        }
-                        $('#fbstylelog').hide();
-                        $('#fbstyle').hide();
-                        getuserprofile(response);
-                        album(response);
-
-                    }else if (response.status === 'not_authorized') {
-                        // The person is logged into Facebook, but not your app.
-                        $('#fbstyle').show();
-                        $('#fbstylelog').hide();
-                        console.log('Please log into this app.');
-                    } else {
-                        // The person is not logged into Facebook, so we're not sure if
-                        // they are logged into this app or not.
-                        $('#fbstyle').hide();
-                        $('#fbstylelog').show();
-                        console.log('Please log into facebook.');
-                    }
-                });
-
-            };
-
-            //make photo url
-            $(".fbstyle").click(function() {
-                FB.login(function(response) {
-                    if (response.authResponse) {
-                        var authResponse=response.authResponse;
-
-                        getuserprofile(response);
-                        album(response);
+      </div>
+    </div>
+    <div class="small-12 medium-7 large-8 columns left middle" id="albumsss1"> </div>
 
 
-                    }
-                }, {scope : 'email,user_photos'})
-            });
-        });
+    <a href="#" data-reveal-id="myModal" id="openmodal" style"display:none;"></a>
+    <div id="myModal" class="reveal-modal" data-reveal>
+      <div class="modal-header">
+        <h4 id="myModalLabel">Please wait while we are preparing your files</h4>
+      </div>
+      <div class="modal-body">
+        <!-- Progress    -->
+        <div id="downloadprogress">
+          <img src="assets/img/6.GIF"/>
+        </div>
+      </div>
+      <div id="download-progress-done" style="display:none">
+        <!--Download Button -->
+        <a href="" id="downloadLink" class="button">Click Here to Download</a>
+      </div>
+      <a class="close-reveal-modal" id="closemodal">&#215;</a>
+    </div>
+
+  </div>
+
+
+  <div id="slider" style="display:none">
+    <div id="backalbum">
+      <button id="backtoalbum"  class="button small">
+        Back to Albums
+      </button>
+      <button id="btnDownload" class="button success small">
+        Download Album
+      </button>
+      <button id="btnMove"  class="button success small">
+        Move Album
+      </button>
+    </div>
+    <!--Thumbnail Navigation-->
+    <div id="prevthumb"></div>
+    <div id="nextthumb"></div>
+
+    <!--Arrow Navigation-->
+    <a id="prevslide" class="load-item"></a>
+    <a  id="nextslide" class="load-item"></a>
+
+    <div id="thumb-tray" class="load-item">
+      <div id="thumb-back"></div>
+      <div id="thumb-forward"></div>
+    </div>
+
+    <!--Time Bar-->
+    <div id="progress-back" class="load-item">
+      <div id="progress-bar"></div>
+    </div>
+
+    <!--Control Bar-->
+    <div id="controls-wrapper" class="load-item">
+      <div id="controls">
+
+        <a id="play-button"><img id="pauseplay" src="assets/img/pause.png"/></a>
+
+        <!--Slide counter-->
+        <div id="slidecounter">
+          <span class="slidenumber"></span> / <span class="totalslides"></span>
+        </div>
+
+        <!--Slide captions displayed here-->
+        <div id="slidecaption"></div>
+
+        <!--Thumb Tray button-->
+        <a id="tray-button" style="display: block"><img id="tray-arrow" src="assets/img/button-tray-up.png"/></a>
+
+        <!--Navigation-->
+        <ul id="slide-list"></ul>
+
+      </div>
+    </div>
+  </div>
+
+    
+
+
+    <script src="assets/js/foundation.min.js"></script>
+    <script src="assets/js/fbscript.js"></script>
+    <script>
+      $(document).foundation();
     </script>
 
-    <!-- HTML5 Shim and Respond.js IE8 support of HTML5 elements and media queries -->
-    <!-- WARNING: Respond.js doesn't work if you view the page via file:// -->
-    <!--[if lt IE 9]>
-        <script src="https://oss.maxcdn.com/libs/html5shiv/3.7.0/html5shiv.js"></script>
-        <script src="https://oss.maxcdn.com/libs/respond.js/1.4.2/respond.min.js"></script>
-    <![endif]-->
+  <link rel="stylesheet" href="assets/css/supersized.css" type="text/css" media="screen" />
+  <link rel="stylesheet" href="assets/css/supersized.shutter.css" type="text/css" media="screen" />
+  <script type="text/javascript" src="assets/js/jquery.easing.min.js"></script>
 
-</head>
-
-<body>
-<div id="fb-root"></div>
-<div class="container ">
-    <div class="row">
-
-    <!-- Navigation -->
-    <nav class="navbar bg-info pagehero  col-lg-12 center-block" role="navigation">
-
-            <div class="navbar-header">
-               <h3 class="clearfix ">Facebook album</h3>
-            </div>
-
-
-        <!-- /.container -->
-    </nav>
-
-    </div>
-</div>
-
-    <!-- Page Content -->
-    <div class="container ">
-
-        <div class="row col-lg-12" id="login-div">
-
-            <div class="col-lg-5">
-
-                <button class="fbstyle btn-lg " id="fbstyle" >
-                    Connect with Facebook
-                </button>
-                <button class="fbstyle btn-lg" id="fbstylelog">
-                Login with Facebook
-                </button>
-                    <img class="loader">
-
-            </div>
-        </div>
-
-
-        <!--        Model For Pop up Download        -->
-        <!-- Button trigger modal -->
-        <button type="button" class="btn btn-primary btn-lg hidden" data-toggle="modal" data-target="#myModal" id="loaderbtn">
-        </button>
-
-        <!-- Modal -->
-        <div class="modal fade " id="myModal" tabindex="-1" role="dialog"  aria-hidden="true">
-            <div class="modal-dialog modal-lg top">
-                <div class="modal-content  radius0">
-
-                    <div class="modal-body">
-                        <button type="button" class="btn btn-default pull-right top close" data-dismiss="modal">X</button>
-                        <div id="download-progress">
-                        <h1>Please Wait while preparing your file</h1>
-
-                        <img src="asset/img/loading1.gif" width="20%" height="20%" id="progress">
-                        </div>
-                        <div id="download-progress-done" >
-
-                                 <h1>Click to download file</h1>
-                            <div class="martop">
-                                 <a href="#" class="btn-lg btn-primary radius0 " id="downloadLink" >Download</a>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-        </div>
-
-        <!-- /.row -->
-
-
-    <div class="row" id="aft-login">
-
-
-                <div class="col-md-3  table-bordered center-block pull-left " id="profile">
-                    <div class="pad0">
-                    <img src="asset/img/bg.png" id="ProfilePic" class="center-block pad0">
-                    </div>
-                    <div id="username" class="pad2">
-                    </div>
-                    <div id="btngroup " class="container-fluid  ">
-                        <button type="button" class="btn btn-success btn-group-justified  center-block  radius0 martop" id="download_all">Download All</button>
-                        <button type="button" class="btn btn-success btn-group-justified  center-block  radius0 martop" id="download_album_select">Download selected</button>
-                        <button type="button" class="btn btn-primary btn-group-justified  center-block  radius0 martop">Move All</button>
-                        <button type="button" class="btn btn-primary btn-group-justified  center-block  radius0 martop" id="move_album_select">Move selected</button>
-                        <button type="button" class="btn btn-warning btn-group-justified  center-block  radius0 martop" id="logout">Signout</button>
-                    </div>
-
-                </div>
-
-
-        <div class="col-md-9 pull-left  " id="albumsss1">
-        </div>
-    </div>
-
-</div>
-    <!-- /.container -->
-
-    <!-- jQuery Version 1.11.1 -->
-    <script src="asset/js/jquery.js"></script>
-
-    <!-- Bootstrap Core JavaScript -->
-    <script src="asset/js/bootstrap.min.js"></script>
-
-</body>
-
+  <script type="text/javascript" src="assets/js/supersized.3.2.7.js"></script>
+  <script type="text/javascript" src="assets/js/supersized.shutter.js"></script>
+<script>
+  $(document).ready(function() {
+    $('#supersized-loader').hide();
+    $('#supersized').hide();
+  });
+</script>
+  </body>
 </html>
